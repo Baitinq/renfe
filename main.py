@@ -30,6 +30,18 @@ def main():
 
     driver = webdriver.Chrome(options=options)
 
+    loginRenfe(driver)
+
+    navigate_to_tickets(driver)
+
+    main_loop(driver)
+
+    logging.info("TICKET BOUGHT!!")
+
+    sleep(999999999)
+
+
+def loginRenfe(driver):
     driver.get("https://venta.renfe.com/vol/loginParticular.do")
 
     sleep(5)
@@ -40,6 +52,8 @@ def main():
 
     sleep(15)
 
+
+def navigate_to_tickets(driver):
     driver.get("https://venta.renfe.com/vol/myPassesCard.do")
 
     sleep(5)
@@ -63,12 +77,20 @@ def main():
 
     sleep(5)
 
+
+def main_loop(driver):
     select_button = None
     while True:
+        # if this is not found, then we presume we have to login again
         try:
             row = driver.find_element(By.XPATH, f"//tr[td[contains(text(), '18.50')]]")
+        except Exception:
+            loginRenfe(driver)
+            navigate_to_tickets(driver)
+            continue
+        try:
             select_button = row.find_element(
-                By.XPATH, ".//button[contains(@id, 'continuar')]"
+                By.XPATH, ".//button[contains(text(), 'Seleccionar')]"
             )
             break
         except Exception:
@@ -84,8 +106,6 @@ def main():
 
     element = driver.find_element(By.ID, "submitSiguiente")
     driver.execute_script("arguments[0].click();", element)
-
-    logging.info("TICKET BOUGHT!!")
 
 
 if __name__ == "__main__":
