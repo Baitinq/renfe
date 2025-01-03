@@ -4,6 +4,7 @@ from selenium.webdriver.chrome.options import Options
 from time import sleep
 import logging
 import os
+import sys
 from dotenv import load_dotenv
 
 
@@ -83,7 +84,7 @@ def main_loop(driver):
     while True:
         # if this is not found, then we presume we have to login again
         try:
-            row = driver.find_element(By.XPATH, f"//tr[td[contains(text(), '18.50')]]")
+            row = driver.find_element(By.XPATH, f"//tr[td[contains(text(), '{sys.argv[1]}')]]".format())
         except Exception:
             loginRenfe(driver)
             navigate_to_tickets(driver)
