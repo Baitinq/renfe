@@ -37,6 +37,8 @@ def main():
 
     main_loop(driver)
 
+    sleep(5)
+    driver.get_screenshot_as_file("bought.png")
     logging.info("TICKET BOUGHT!!")
 
     sleep(999999999)
